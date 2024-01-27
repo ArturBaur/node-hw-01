@@ -1,58 +1,28 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-} = require("./contacts");
+const yargs = require('yargs');
+const contacts = require('./contacts');
 
-const { Command } = require("commander");
-const program = new Command();
-program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
-
-program.parse(process.argv);
-
-const argv = program.opts();
-
-function invokeAction({ action, id, name, email, phone }) {
+async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
-    case "list":
-      listContacts();
+    case 'list':
+      await contacts.listContacts();
       break;
 
-    case "get":
-      if (id) {
-        getContactById(Number(id));
-      } else {
-        console.error('Error: ID is required for "get" action');
-      }
+    case 'get':
+      await contacts.getContactById(id);
       break;
 
-    case "add":
-      if (name && email && phone) {
-        addContact(name, email, phone);
-      } else {
-        console.error(
-          'Error: Name, email, and phone are required for "add" action'
-        );
-      }
+    case 'add':
+      await contacts.addContact(name, email, phone);
       break;
 
-    case "remove":
-      if (id) {
-        removeContact(Number(id));
-      } else {
-        console.error('Error: ID is required for "remove" action');
-      }
+    case 'remove':
+      await contacts.removeContact(id);
       break;
 
     default:
-      console.warn("\x1B[31m Unknown action type!");
+      console.warn('\x1B[31m Unknown action type!');
   }
 }
 
+const argv = yargs(process.argv.slice(2)).argv;
 invokeAction(argv);
