@@ -1,7 +1,6 @@
 {
   "name": "hw-01",
   "version": "1.0.0",
-  "homepage": "https://ArturBaur.github.io/node-hw-01.git/",
   "description": "",
   "main": "index.js",
   "scripts": {
